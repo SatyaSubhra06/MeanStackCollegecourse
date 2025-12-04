@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arithmetic Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #024503;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calculator-card {
+            background-color: black;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #fff8f8;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #e7dddd;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box; /* Ensures padding doesn't widen element */
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result-display {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 6px;
+            font-weight: bold;
+            color: #333;
+            min-height: 20px;
+        }
+
+        .error {
+            color: #dc3545;
+        }
+    </style>
+    <script>
+        function performCalculation() {
+            // 1. Get the INPUT elements by ID
+            // We use parseFloat to handle decimals (like 5.5 + 2.2)
+            var val1 = parseFloat(document.getElementById("num1").value);
+            var val2 = parseFloat(document.getElementById("num2").value);
+            
+            // 2. Get the OPERATION element to see what the user chose
+            var operation = document.getElementById("operation-select").value;
+            
+            // 3. Get the RESULT element where we will show the answer
+            var displayBox = document.getElementById("result-display");
+
+            // Validation: Check if the boxes are empty (NaN means Not a Number)
+            if (isNaN(val1) || isNaN(val2)) {
+                displayBox.innerHTML = "<span class='error'>Please enter valid numbers in both fields.</span>";
+                return; // Stop the function here
+            }
+
+            var result = 0;
+
+            // 4. LOGIC: Use IF / ELSE IF to decide the math
+            if (operation === "add") {
+                result = val1 + val2;
+            } 
+            else if (operation === "subtract") {
+                result = val1 - val2;
+            } 
+            else if (operation === "multiply") {
+                result = val1 * val2;
+            } 
+            else if (operation === "divide") {
+                // Check for division by zero
+                if (val2 === 0) {
+                    displayBox.innerHTML = "<span class='error'>Cannot divide by zero!</span>";
+                    return;
+                } else {
+                    result = val1 / val2;
+                }
+            }
+            else {
+                // This handles the case if something goes wrong with the dropdown
+                displayBox.innerText = "Invalid Operation";
+                return;
+            }
+
+            // 5. Display the final result
+            // We verify if result is a decimal, if so, we limit it to 2 decimal places for cleanliness
+            // Number.isInteger checks if it's a whole number
+            if (!Number.isInteger(result)) {
+                result = result.toFixed(2);
+            }
+
+            displayBox.innerText = "Result: " + result;
+        }
+    </script>
+</head>
+<body>
+
+    <div class="calculator-card">
+        <h2>Simple Calculator</h2>
+
+        <div class="input-group">
+            <label for="num1">First Number:</label>
+            <input type="number" id="num1" placeholder="e.g. 10">
+        </div>
+
+        <div class="input-group">
+            <label for="operation-select">Operation:</label>
+            <select id="operation-select">
+                <option value="add">Add (+)</option>
+                <option value="subtract">Subtract (-)</option>
+                <option value="multiply">Multiply (×)</option>
+                <option value="divide">Divide (÷)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="num2">Second Number:</label>
+            <input type="number" id="num2" placeholder="e.g. 5">
+        </div>
+
+        <button onclick="performCalculation()">Calculate</button>
+
+        <div id="result-display">Result will appear here</div>
+    </div>
+
+</body>
+</html>
